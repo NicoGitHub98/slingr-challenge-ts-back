@@ -1,0 +1,30 @@
+services:
+  node_app:
+    container_name: node_app
+    build: .
+    image: 'node:20'
+    ports: 
+      - "8080:8080"
+    environment:
+      - PG_DB=tasks_db
+      - PG_USERNAME=admin
+      - PG_PASSWORD=admin
+      - PG_HOST=node_db
+    depends_on:
+      - node_db
+  
+  node_db:
+    container_name: node_db
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=tasks_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - node_db_data:/var/lib/postgesql/data
+
+volumes:
+  node_db_data: {}
+  
